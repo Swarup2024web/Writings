@@ -4,122 +4,138 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Writing Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f4f6f8;
       margin: 0;
-      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    header {
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      letter-spacing: 1px;
+      font-weight: 500;
     }
 
     .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 24px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #1a73e8;
-      margin-bottom: 24px;
-    }
-
-    .form-group {
-      background: #ffffff;
-      padding: 24px;
+      max-width: 720px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     label {
       display: block;
-      margin: 10px 0 6px;
+      margin-top: 16px;
+      margin-bottom: 6px;
       font-weight: 500;
     }
 
-    input, select, textarea, button {
+    input, select, textarea {
       width: 100%;
-      font-size: 16px;
-      padding: 12px;
+      padding: 14px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      box-sizing: border-box;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      background: #fafafa;
+      transition: 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #1a73e8;
       outline: none;
+      background: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
     }
 
     button {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s ease;
-      font-weight: bold;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      padding: 14px 24px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #0f5dc2;
+      background: #0c59c5;
     }
 
-    button .material-symbols-outlined {
+    .material-symbols-outlined {
       margin-right: 8px;
+      font-size: 20px;
     }
 
-    .output-box {
-      margin-top: 24px;
-      background: #fff;
+    .output {
+      margin-top: 30px;
       padding: 20px;
-      border-left: 5px solid #1a73e8;
-      border-radius: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      background: #f0f7ff;
+      border-left: 6px solid #1a73e8;
+      border-radius: 10px;
       white-space: pre-wrap;
-    }
-
-    .footer-note {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-      color: #888;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
     @media (max-width: 600px) {
       .container {
+        margin: 10px;
         padding: 16px;
+      }
+      header {
+        font-size: 20px;
       }
     }
   </style>
 </head>
 <body>
 
+  <header>
+    <span class="material-symbols-outlined">smart_toy</span> AI Writing Generator
+  </header>
+
   <div class="container">
-    <h2><span class="material-symbols-outlined">edit</span> AI Writing Generator</h2>
+    <label for="topicInput"><span class="material-symbols-outlined">edit_note</span> Topic or Instruction</label>
+    <textarea id="topicInput" placeholder="E.g. The Importance of Trees"></textarea>
 
-    <div class="form-group">
-      <label for="topicInput"><span class="material-symbols-outlined">subject</span> Topic / Instruction</label>
-      <textarea id="topicInput" placeholder="Enter your topic..." rows="4" required></textarea>
+    <label for="wordCountInput"><span class="material-symbols-outlined">123</span> Word Count</label>
+    <input type="number" id="wordCountInput" placeholder="E.g. 150" />
 
-      <label for="wordCountInput"><span class="material-symbols-outlined">123</span> Word Count</label>
-      <input type="number" id="wordCountInput" placeholder="e.g. 150" required />
+    <label for="levelInput"><span class="material-symbols-outlined">grading</span> Language Level</label>
+    <select id="levelInput">
+      <option value="easy">Easy</option>
+      <option value="moderate">Moderate</option>
+      <option value="standard">Standard</option>
+    </select>
 
-      <label for="levelInput"><span class="material-symbols-outlined">grading</span> Difficulty Level</label>
-      <select id="levelInput">
-        <option value="easy">Easy</option>
-        <option value="moderate">Moderate</option>
-        <option value="standard">Standard</option>
-      </select>
+    <button onclick="generateText()">
+      <span class="material-symbols-outlined">bolt</span> Generate Answer
+    </button>
 
-      <button onclick="generateText()">
-        <span class="material-symbols-outlined">smart_toy</span> Generate Answer
-      </button>
-    </div>
-
-    <div class="output-box" id="outputArea">AI response will appear here...</div>
-
-    <div class="footer-note">Powered by OpenAI | Designed in Material 3</div>
+    <div class="output" id="outputArea">Generated answer will appear here...</div>
   </div>
 
   <script>
@@ -130,30 +146,26 @@
       const output = document.getElementById("outputArea");
 
       if (!topic || !wordCount) {
-        output.innerText = "⚠️ Please provide a topic and word count.";
+        output.innerText = "⚠️ Please enter both topic and word count.";
         return;
       }
 
       output.innerText = "⏳ Generating, please wait...";
 
       try {
-        const response = await fetch("https://YOUR_FIREBASE_PROJECT_URL.cloudfunctions.net/generateWriting", {
+        const response = await fetch("https://your-replit-or-firebase-endpoint/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            topic: topic,
-            wordCount: wordCount,
-            level: level
-          })
+          body: JSON.stringify({ topic, wordCount, level })
         });
 
         const data = await response.json();
-        output.innerText = data.result || "❌ No response received.";
-      } catch (err) {
-        output.innerText = "❌ Error: " + err.message;
+        output.innerText = data.result || "⚠️ No result received.";
+      } catch (error) {
+        output.innerText = "❌ Error: " + error.message;
       }
     }
   </script>
 
 </body>
-</html>
+      </html>
